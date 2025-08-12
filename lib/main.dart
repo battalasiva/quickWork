@@ -4,30 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickWork/core/constants/colors.dart';
+import 'package:quickWork/firebase_options.dart';
 import 'package:quickWork/presentations/cubit/auth/current-customer/current_customer_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/signin/sigin_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/trigger-otp/trigger_otp_cubit.dart';
 import 'package:quickWork/presentations/screens/auth/splash-screen/splashScreen.dart';
 import 'core/network/injection.dart' as di;
 
-// @pragma('vm:entry-point')
-// // Firebase Background Message Handler
-// Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   print("Handling a background message: ${message.messageId}");
-// }
+@pragma('vm:entry-point')
+// Firebase Background Message Handler
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // try {
-  //   await Firebase.initializeApp(
-  //     options: DefaultFirebaseOptions.currentPlatform,
-  //   );
-  //   print("Firebase initialized successfully");
-  //   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  // } catch (e) {
-  //   print("Firebase initialization error: $e");
-  // }
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print("Firebase initialized successfully");
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  } catch (e) {
+    print("Firebase initialization error: $e");
+  }
   di.init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
