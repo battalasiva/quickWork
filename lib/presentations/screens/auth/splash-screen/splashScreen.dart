@@ -15,7 +15,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String? token;
-  // NotificationServices notificationServices = NotificationServices();
+  NotificationServices notificationServices = NotificationServices();
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   permissions() async {
     // await Geolocator.requestPermission();
-    // await notificationServices.requestNotificationPermissions();
+    await notificationServices.requestNotificationPermissions();
   }
 
   void proceedWithAppFlow() {}
@@ -39,30 +39,32 @@ class _SplashScreenState extends State<SplashScreen> {
     token = await SharedPrefsHelper.getString(AppKeys.authKey);
     // generateToken();
     print('Token: $token');
-
-    if (token == null || token!.isEmpty) {
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
-    } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => BottomTabNavigator()),
-      );
-    }
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => BottomTabNavigator()));
+    // if (token == null || token!.isEmpty) {
+    //   Navigator.of(
+    //     context,
+    //   ).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
+    // } else {
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(builder: (_) => BottomTabNavigator()),
+    //   );
+    // }
   }
 
-  // Future<void> generateToken() async {
-  //   await notificationServices.forgroundMessage();
-  //   await notificationServices.firebaseInit(context);
-  //   await notificationServices.setupInteractMessage(context);
-  //   await notificationServices.isRefreshToken();
-  //   String? token = await notificationServices.getDeviceToken();
-  //   if (mounted && token != null) {
-  //     print('FCM Token: $token');
-  //     // fcmToken = token;
-  //     // Future.microtask(() => sendFcmToken());
-  //   }
-  // }
+  Future<void> generateToken() async {
+    await notificationServices.forgroundMessage();
+    await notificationServices.firebaseInit(context);
+    await notificationServices.setupInteractMessage(context);
+    await notificationServices.isRefreshToken();
+    String? token = await notificationServices.getDeviceToken();
+    if (mounted && token != null) {
+      print('FCM Token: $token');
+      // fcmToken = token;
+      // Future.microtask(() => sendFcmToken());
+    }
+  }
 
   Future<void> checkForUpdate() async {
     try {

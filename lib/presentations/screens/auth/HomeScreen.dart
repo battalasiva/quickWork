@@ -99,25 +99,25 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       builder: (context, state) {
-        if (state is CurrentCustomerLoading) {
-          return Scaffold(
-            backgroundColor: AppColor.white,
-            body: const Center(child: AppLoader()),
-          );
-        }
-        if (state is CurrentCustomerError) {
-          return SplashFailureWidget(
-            onRefresh: fetchCurrentCustomer,
-            onLogout: () async {
-              SharedPrefsHelper.clearAllData();
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-                (route) => false,
-              );
-            },
-          );
-        }
+        // if (state is CurrentCustomerLoading) {
+        //   return Scaffold(
+        //     backgroundColor: AppColor.white,
+        //     body: const Center(child: AppLoader()),
+        //   );
+        // }
+        // if (state is CurrentCustomerError) {
+        //   return SplashFailureWidget(
+        //     onRefresh: fetchCurrentCustomer,
+        //     onLogout: () async {
+        //       SharedPrefsHelper.clearAllData();
+        //       Navigator.pushAndRemoveUntil(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => LoginScreen()),
+        //         (route) => false,
+        //       );
+        //     },
+        //   );
+        // }
         return Scaffold(
           backgroundColor: AppColor.white,
           body: RefreshIndicator(
