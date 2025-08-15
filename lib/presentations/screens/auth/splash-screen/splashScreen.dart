@@ -5,7 +5,7 @@ import 'package:quickWork/core/constants/text_keys.dart';
 import 'package:quickWork/core/utils/local-storage/Shared_prefs.dart';
 import 'package:quickWork/core/utils/push-notifications/PushNotificationServices.dart';
 import 'package:quickWork/presentations/screens/auth/login/login.dart';
-import 'package:quickWork/presentations/widgets/elements/BottomTabBase.dart';
+import 'package:quickWork/core/common/elements/BottomTabBase.dart';
 import 'package:in_app_update/in_app_update.dart';
 
 class SplashScreen extends StatefulWidget {

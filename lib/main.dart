@@ -9,6 +9,7 @@ import 'package:quickWork/presentations/cubit/auth/current-customer/current_cust
 import 'package:quickWork/presentations/cubit/auth/signin/sigin_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/trigger-otp/trigger_otp_cubit.dart';
 import 'package:quickWork/presentations/screens/auth/splash-screen/splashScreen.dart';
+import 'core/constants/app_sizes.dart';
 import 'core/network/injection.dart' as di;
 
 @pragma('vm:entry-point')
@@ -47,12 +48,13 @@ void main() async {
 class QuickWorkApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AppSizes.init(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Quick Work',
       theme: ThemeData(
         primaryColor: AppColor.primaryColor1,
-        scaffoldBackgroundColor: const Color(0xFFFFD6D4),
+        scaffoldBackgroundColor: AppColor.white,
       ),
       home: SplashScreen(),
     );

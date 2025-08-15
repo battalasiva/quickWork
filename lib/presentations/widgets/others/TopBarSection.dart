@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quickWork/core/constants/colors.dart';
 import 'package:quickWork/core/constants/sizes.dart';
+import 'package:quickWork/presentations/screens/common/NoticationsList.dart';
+import 'package:quickWork/presentations/screens/users/WorksHistory.dart';
 
 class TopBarSection extends StatefulWidget {
   final String? availableBalance, totalAmount;
@@ -95,21 +97,22 @@ class _TopBarSectionState extends State<TopBarSection> {
                   IconButton(
                     icon: Icon(Icons.list_alt_outlined, color: AppColor.white),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (_) => MyOrdersScreen()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => WorksHistory()),
+                      );
                     },
                   ),
                   const SizedBox(width: 5),
                   IconButton(
                     icon: Icon(Icons.notifications, color: AppColor.white),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (_) => const NotificationScreen()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const NotificationsScreen(),
+                        ),
+                      );
                     },
                   ),
                 ],

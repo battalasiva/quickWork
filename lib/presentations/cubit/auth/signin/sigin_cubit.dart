@@ -6,7 +6,7 @@ import 'package:quickWork/core/utils/local-storage/Shared_prefs.dart';
 import 'package:quickWork/data/model/auth/signin_model.dart';
 import 'package:quickWork/domain/usecase/auth/signin_usecase.dart';
 import 'package:quickWork/presentations/screens/auth/profile/Complete_profile.dart';
-import 'package:quickWork/presentations/widgets/elements/BottomTabBase.dart';
+import 'package:quickWork/core/common/elements/BottomTabBase.dart';
 import 'signin_state.dart';
 
 class SignInCubit extends Cubit<SignInState> {

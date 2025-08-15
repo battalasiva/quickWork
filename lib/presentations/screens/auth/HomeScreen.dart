@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickWork/core/common/globalData.dart';
 import 'package:quickWork/core/constants/colors.dart';
+import 'package:quickWork/core/constants/text_styles.dart';
 import 'package:quickWork/core/utils/local-storage/Shared_prefs.dart';
 import 'package:quickWork/presentations/cubit/auth/current-customer/current_customer_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/current-customer/current_customer_state.dart';
 import 'package:quickWork/presentations/screens/auth/login/login.dart';
 import 'package:quickWork/presentations/screens/auth/splash-screen/SplashFailureWidget.dart';
-import 'package:quickWork/presentations/widgets/elements/AppLoaderWidget.dart';
-import 'package:quickWork/presentations/widgets/elements/ImageSlider.dart';
+import 'package:quickWork/core/common/elements/AppLoaderWidget.dart';
+import 'package:quickWork/core/common/elements/ImageSlider.dart';
+import 'package:quickWork/presentations/screens/users/workPostingScreen.dart';
 import 'package:quickWork/presentations/widgets/others/HomeServicesGrid.dart';
 import 'package:quickWork/presentations/widgets/others/TopBarSection.dart';
 
@@ -145,13 +147,55 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 200, child: ImageSlider()),
+                  SizedBox(height: 250, child: ImageSlider()),
                   const SizedBox(height: 5),
                   HomeServicesGrid(),
                 ],
               ),
             ),
           ),
+
+          floatingActionButton: Container(
+            width: 170,
+            height: 48,
+            decoration: BoxDecoration(
+              color: AppColor.primaryColor1,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 6,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(30),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Workpostingscreen()),
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.work_outline, // icon for "work"
+                    color: AppColor.white,
+                    size: 22,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Post Work",
+                    style: txt_15_500.copyWith(color: AppColor.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
         );
       },
     );
