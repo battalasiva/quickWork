@@ -12,7 +12,7 @@ class ImageSlider extends StatefulWidget {
 }
 
 class _ImageSliderState extends State<ImageSlider> {
-  final List<String> imageList = [bannerOne, bannerOne];
+  final List<String> imageList = [bannerOne, electricalWork];
   int activeIndex = 0;
   final CarouselSliderController _controller = CarouselSliderController();
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:quickWork/core/constants/app_sizes.dart';
 import 'package:quickWork/core/constants/colors.dart';
 import 'package:quickWork/core/constants/sizes.dart';
+import 'package:quickWork/core/common/commonMethods.dart';
 import 'package:quickWork/presentations/screens/common/NoticationsList.dart';
 import 'package:quickWork/presentations/screens/users/WorksHistory.dart';
 
@@ -15,112 +17,83 @@ class TopBarSection extends StatefulWidget {
 class _TopBarSectionState extends State<TopBarSection> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 40),
-        Container(
-          width: getWidth(context),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {},
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Quick Work",
-                      style: TextStyle(
-                        color: AppColor.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    // LocationDisplay()
-                    // Text('Click Here \nFor App Development',
-                    //     style: TextStyle(
-                    //       color: AppColor.white,
-                    //       fontSize: 13,
-                    //       fontWeight: FontWeight.bold,
-                    //     )),
-                  ],
+    return Container(
+      width: getWidth(context),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSizes.width(16),
+        vertical: AppSizes.height(20),
+      ),
+      margin: EdgeInsets.only(
+        top: AppSizes.height(40),
+        bottom: AppSizes.height(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () {},
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  getGreetingMessage(),
+                  style: TextStyle(
+                    color: AppColor.white,
+                    fontSize: AppSizes.font(16),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              AppSizes.hSpace(5),
+              IconButton(
+                icon: Icon(
+                  Icons.list_alt_outlined,
+                  color: AppColor.white,
+                  size: AppSizes.iconSize(24),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => WorksHistory()),
+                  );
+                },
               ),
-              Row(
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      // IconButton(
-                      //   icon: Icon(
-                      //     Icons.wallet,
-                      //     color: AppColor.white,
-                      //     size: 30,
-                      //   ),
-                      //   onPressed: () {
-                      //     // Navigator.push(
-                      //     //   context,
-                      //     //   MaterialPageRoute(
-                      //     //       builder: (_) => WalletScreen(
-                      //     //             availableBalance: widget.availableBalance,
-                      //     //             totalAmount: widget.totalAmount,
-                      //     //           )),
-                      //     // );
-                      //   },
-                      // ),
-                      // Positioned(
-                      //   top: -6,
-                      //   right: -6,
-                      //   child: Container(
-                      //     padding: const EdgeInsets.symmetric(
-                      //       horizontal: 6,
-                      //       vertical: 2,
-                      //     ),
-                      //     decoration: BoxDecoration(
-                      //       color: AppColor.black,
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //     child: Text(
-                      //       '₹ ${widget.availableBalance ?? '0'}',
-                      //       style: TextStyle(
-                      //         color: AppColor.white,
-                      //         fontSize: 10,
-                      //         fontWeight: FontWeight.bold,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
+              AppSizes.hSpace(5),
+              IconButton(
+                icon: Icon(
+                  Icons.notifications,
+                  color: AppColor.white,
+                  size: AppSizes.iconSize(24),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationsScreen(),
+                    ),
+                  );
+                },
+              ),
+              AppSizes.hSpace(5),
+              Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: AppColor.white,
+                    size: AppSizes.iconSize(28),
                   ),
-                  const SizedBox(width: 5),
-                  IconButton(
-                    icon: Icon(Icons.list_alt_outlined, color: AppColor.white),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => WorksHistory()),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 5),
-                  IconButton(
-                    icon: Icon(Icons.notifications, color: AppColor.white),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const NotificationsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                ),
               ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

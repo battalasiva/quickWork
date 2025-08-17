@@ -66,25 +66,25 @@ class _WorkpostingscreenState extends State<Workpostingscreen> {
               const SizedBox(height: 16),
 
               // Work ID dropdown
-              CommonComponents.defaultDropdownSearch<String>(
-                context,
-                title: "Work Type",
-                hintText: "Select Work Type",
-                items: (filter, _) async {
-                  await Future.delayed(const Duration(milliseconds: 300));
-                  return ["Carpentry", "Electrician", "Plumber"];
-                },
-                itemAsString: (String u) => u,
-                selectedItem: _selectedWorkId,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedWorkId = value;
-                  });
-                },
-                validator: (value) =>
-                    value == null ? 'Work ID is required' : null,
-              ),
-              const SizedBox(height: 16),
+              // CommonComponents.defaultDropdownSearch<String>(
+              //   context,
+              //   title: "Work Type",
+              //   hintText: "Select Work Type",
+              //   items: (filter, _) async {
+              //     await Future.delayed(const Duration(milliseconds: 300));
+              //     return ["Carpentry", "Electrician", "Plumber"];
+              //   },
+              //   itemAsString: (String u) => u,
+              //   selectedItem: _selectedWorkId,
+              //   onChanged: (String? value) {
+              //     setState(() {
+              //       _selectedWorkId = value;
+              //     });
+              //   },
+              //   validator: (value) =>
+              //       value == null ? 'Work ID is required' : null,
+              // ),
+              // const SizedBox(height: 16),
 
               // Priority dropdown
               CommonComponents.defaultDropdownSearch<String>(

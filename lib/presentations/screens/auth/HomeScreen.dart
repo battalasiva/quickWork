@@ -13,6 +13,7 @@ import 'package:quickWork/core/common/elements/ImageSlider.dart';
 import 'package:quickWork/presentations/screens/users/workPostingScreen.dart';
 import 'package:quickWork/presentations/widgets/others/HomeServicesGrid.dart';
 import 'package:quickWork/presentations/widgets/others/TopBarSection.dart';
+import 'package:quickWork/presentations/widgets/others/SidebarMenu.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -122,6 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // }
         return Scaffold(
           backgroundColor: AppColor.white,
+          endDrawer: SidebarMenu(),
           body: RefreshIndicator(
             onRefresh: fetchCurrentCustomer,
             child: SingleChildScrollView(
@@ -155,47 +157,47 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          floatingActionButton: Container(
-            width: 170,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColor.primaryColor1,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 6,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(30),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Workpostingscreen()),
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.work_outline, // icon for "work"
-                    color: AppColor.white,
-                    size: 22,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "Post Work",
-                    style: txt_15_500.copyWith(color: AppColor.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          // floatingActionButton: Container(
+          //   width: 170,
+          //   height: 48,
+          //   decoration: BoxDecoration(
+          //     color: AppColor.primaryColor1,
+          //     borderRadius: BorderRadius.circular(30),
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color: Colors.black26,
+          //         blurRadius: 6,
+          //         offset: Offset(0, 3),
+          //       ),
+          //     ],
+          //   ),
+          //   child: InkWell(
+          //     borderRadius: BorderRadius.circular(30),
+          //     onTap: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (context) => Workpostingscreen()),
+          //       );
+          //     },
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         Icon(
+          //           Icons.work_outline, // icon for "work"
+          //           color: AppColor.white,
+          //           size: 22,
+          //         ),
+          //         const SizedBox(width: 8),
+          //         Text(
+          //           "Post Work",
+          //           style: txt_15_500.copyWith(color: AppColor.white),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // floatingActionButtonLocation:
+          //     FloatingActionButtonLocation.centerFloat,
         );
       },
     );
