@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:quickWork/domain/usecase/auth/trigger_otp_usecase.dart';
 import 'package:quickWork/presentations/screens/auth/login/otpScreen.dart';
-import 'package:quickWork/presentations/widgets/elements/custom_snackbar.dart';
+import 'package:quickWork/core/common/elements/custom_snackbar.dart';
 
 import '../../../../core/network/network_helper.dart';
 import '../../../../core/network/network_service.dart';

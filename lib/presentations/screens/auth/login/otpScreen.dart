@@ -5,8 +5,8 @@ import 'package:quickWork/core/constants/colors.dart';
 import 'package:quickWork/core/constants/text_styles.dart';
 import 'package:quickWork/presentations/cubit/auth/signin/sigin_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/signin/signin_state.dart';
-import 'package:quickWork/presentations/widgets/elements/CustomizedButton.dart';
-import 'package:quickWork/presentations/widgets/elements/top_bar.dart';
+import 'package:quickWork/core/common/elements/CustomizedButton.dart';
+import 'package:quickWork/core/common/elements/top_bar.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "737796208771",
+    "project_id": "quickwork-52afd",
+    "storage_bucket": "quickwork-52afd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737796208771:android:503f892ee86d3a954443b6",
+        "android_client_info": {
+          "package_name": "com.quickWork"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATXu4Aq4PAII8uKti7Nhq4BzBzRCIZoNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

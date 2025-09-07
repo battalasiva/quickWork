@@ -12,7 +12,7 @@ class ImageSlider extends StatefulWidget {
 }
 
 class _ImageSliderState extends State<ImageSlider> {
-  final List<String> imageList = [bannerOne, bannerOne];
+  final List<String> imageList = [bannerOne, electricalWork];
   int activeIndex = 0;
   final CarouselSliderController _controller = CarouselSliderController();
 
@@ -23,7 +23,7 @@ class _ImageSliderState extends State<ImageSlider> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: SizedBox(
-            height: 160,
+            height: 200,
             width: double.infinity,
             child: CarouselSlider.builder(
               carouselController: _controller,
@@ -36,7 +36,7 @@ class _ImageSliderState extends State<ImageSlider> {
                     fit: BoxFit.cover,
                     width: double.infinity,
                     cacheWidth: 800,
-                    cacheHeight: 350,
+                    cacheHeight: 370,
                   ),
                 );
               },
