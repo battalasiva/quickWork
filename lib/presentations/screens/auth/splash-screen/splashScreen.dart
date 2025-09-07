@@ -39,18 +39,18 @@ class _SplashScreenState extends State<SplashScreen> {
     token = await SharedPrefsHelper.getString(AppKeys.authKey);
     // generateToken();
     print('Token: $token');
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
-    // if (token == null || token!.isEmpty) {
-    //   Navigator.of(
-    //     context,
-    //   ).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
-    // } else {
-    //   Navigator.of(context).pushReplacement(
-    //     MaterialPageRoute(builder: (_) => BottomTabNavigator()),
-    //   );
-    // }
+    // Navigator.of(
+    //   context,
+    // ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+    if (token == null || token!.isEmpty) {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
+    } else {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+    }
   }
 
   Future<void> generateToken() async {

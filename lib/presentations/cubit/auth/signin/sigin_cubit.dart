@@ -2,11 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:quickWork/core/constants/text_keys.dart';
 import 'package:quickWork/core/utils/local-storage/Shared_prefs.dart';
-
-import 'package:quickWork/data/model/auth/signin_model.dart';
 import 'package:quickWork/domain/usecase/auth/signin_usecase.dart';
+import 'package:quickWork/presentations/screens/auth/HomeScreen.dart';
 import 'package:quickWork/presentations/screens/auth/profile/Complete_profile.dart';
-import 'package:quickWork/core/common/elements/BottomTabBase.dart';
 import 'signin_state.dart';
 
 class SignInCubit extends Cubit<SignInState> {
@@ -57,7 +55,7 @@ class SignInCubit extends Cubit<SignInState> {
         );
         if (signEntity.data?.register == true) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => BottomTabNavigator()),
+            MaterialPageRoute(builder: (_) => HomeScreen()),
             (route) => false,
           );
         } else {

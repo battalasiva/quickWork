@@ -130,11 +130,11 @@ class SidebarMenu extends StatelessWidget {
                   _buildListTile(Icons.support_agent, "Support", () {
                     showContactUsModal(context);
                   }),
-                  _buildListTile(Icons.share, "Share", () {
-                    shareFunction(
-                      'Hello, check out this amazing app!\nhttps://play.google.com/store/apps/details?id=com.meatspot&hl=en',
-                    );
-                  }),
+                  // _buildListTile(Icons.share, "Share", () {
+                  //   shareFunction(
+                  //     'Hello, check out this amazing app!\nhttps://play.google.com/store/apps/details?id=com.meatspot&hl=en',
+                  //   );
+                  // }),
                   _buildListTile(
                     Icons.description_outlined,
                     "Terms & Conditions",
@@ -174,7 +174,7 @@ class SidebarMenu extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(AppSizes.width(20)),
               child: Text(
-                "App Version: v1.0.3",
+                "App Version: v1.0.1",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: AppSizes.font(12),

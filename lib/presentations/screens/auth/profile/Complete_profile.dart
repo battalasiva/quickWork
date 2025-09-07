@@ -416,7 +416,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       //         // Navigator.popUntil(context, (route) => route.isFirst);
       //         //  Navigator.pop(context, true);
       //         Navigator.of(context).pushAndRemoveUntil(
-      //           MaterialPageRoute(builder: (_) => BottomTabNavigator()),
+      //           MaterialPageRoute(builder: (_) => HomeScreen()),
       //           (route) => false,
       //         );
       //       } else if (state is UpdateUserDetailsError) {
