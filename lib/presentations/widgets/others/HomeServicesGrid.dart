@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quickWork/core/constants/app_sizes.dart';
+import 'package:quickWork/core/constants/colors.dart';
+import 'package:quickWork/presentations/screens/users/workPostingScreen.dart';
 
 class HomeServicesGrid extends StatelessWidget {
   const HomeServicesGrid({super.key});
@@ -21,53 +24,81 @@ class HomeServicesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: services.length,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(12),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 0.85,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemBuilder: (context, index) {
-        final service = services[index];
-        return Container(
-          decoration: BoxDecoration(
-            color: service.bgColor,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 4,
-                offset: const Offset(2, 2),
-              ),
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSizes.width(16),
+            vertical: AppSizes.height(12),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: Colors.white,
-                child: Icon(service.icon, size: 28, color: Colors.black87),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                service.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: Colors.black87,
+          child: Text(
+            'Available Services',
+            style: TextStyle(
+              fontSize: AppSizes.font(18),
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+        ListView.builder(
+          itemCount: services.length,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: AppSizes.width(12)),
+          itemBuilder: (context, index) {
+            final service = services[index];
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: AppSizes.height(4)),
+              child: ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Workpostingscreen()),
+                  );
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: AppSizes.width(16),
+                  vertical: AppSizes.height(8),
+                ),
+                leading: Container(
+                  width: AppSizes.width(50),
+                  height: AppSizes.height(50),
+                  decoration: BoxDecoration(
+                    color: service.bgColor,
+                    borderRadius: BorderRadius.circular(AppSizes.radius(12)),
+                  ),
+                  child: Icon(
+                    service.icon,
+                    size: AppSizes.iconSize(24),
+                    color: Colors.black87,
+                  ),
+                ),
+                title: Text(
+                  service.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: AppSizes.font(16),
+                    color: Colors.black87,
+                  ),
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  size: AppSizes.iconSize(16),
+                  color: AppColor.primaryColor1,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.radius(12)),
+                  side: BorderSide(
+                    color: Colors.grey.withOpacity(0.2),
+                    width: AppSizes.width(1),
+                  ),
                 ),
               ),
-            ],
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
   }
 }

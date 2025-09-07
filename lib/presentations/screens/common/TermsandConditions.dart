@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickWork/core/constants/colors.dart';
 import 'package:quickWork/core/constants/text_styles.dart';
-import 'package:quickWork/presentations/widgets/elements/top_bar.dart';
+import 'package:quickWork/core/common/elements/top_bar.dart';
 
 class Termsandconditions extends StatefulWidget {
   const Termsandconditions({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickWork/core/constants/colors.dart';
-import 'package:quickWork/presentations/widgets/elements/top_bar.dart';
+import 'package:quickWork/core/common/elements/top_bar.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
   final String? mobileNumber;
@@ -416,7 +416,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       //         // Navigator.popUntil(context, (route) => route.isFirst);
       //         //  Navigator.pop(context, true);
       //         Navigator.of(context).pushAndRemoveUntil(
-      //           MaterialPageRoute(builder: (_) => BottomTabNavigator()),
+      //           MaterialPageRoute(builder: (_) => HomeScreen()),
       //           (route) => false,
       //         );
       //       } else if (state is UpdateUserDetailsError) {

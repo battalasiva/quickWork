@@ -7,12 +7,14 @@ import 'package:quickWork/core/utils/local-storage/Shared_prefs.dart';
 import 'package:quickWork/data/model/auth/current_Customer_modal.dart';
 import 'package:quickWork/presentations/cubit/auth/current-customer/current_customer_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/current-customer/current_customer_state.dart';
+import 'package:quickWork/presentations/screens/admin/AdminServicesList.dart';
+import 'package:quickWork/presentations/screens/admin/WorkPostList.dart';
 import 'package:quickWork/presentations/screens/auth/login/login.dart';
 import 'package:quickWork/presentations/screens/auth/profile/Complete_profile.dart';
 import 'package:quickWork/presentations/screens/common/TermsandConditions.dart';
-import 'package:quickWork/presentations/widgets/elements/ConfirmationDialog.dart';
-import 'package:quickWork/presentations/widgets/elements/ContactusModal.dart';
-import 'package:quickWork/presentations/widgets/elements/top_bar.dart';
+import 'package:quickWork/core/common/elements/ConfirmationDialog.dart';
+import 'package:quickWork/core/common/elements/ContactusModal.dart';
+import 'package:quickWork/core/common/elements/top_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -87,198 +89,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              BlocBuilder<CurrentCustomerCubit, CurrentCustomerState>(
-                builder: (context, state) {
-                  userName = 'Loading...';
-                  mobileNumber = 'Loading...';
-
-                  if (state is CurrentCustomerSuccess) {
-                    final data = state.customer.data;
-                    userName = data?.fullName.toString() ?? '___';
-                    mobileNumber = data?.primaryContact?.toString() ?? '---';
-                    userId = data?.id;
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      setState(() {
-                        isAgent = data!.roles!.any(
-                          (role) => role.name == 'ROLE_AGENT',
-                        );
-                        isAdmin = data.roles!.any(
-                          (role) => role.name == 'ROLE_USER_ADMIN',
-                        );
-                        isDeliveryBoy = data.roles!.any(
-                          (role) => role.name == 'ROLE_DELIVERY_BOY',
-                        );
-                        isSystemUser = data.roles!.any(
-                          (role) => role.name == 'ROLE_SYSTEM_USER',
-                        );
-                        role = getReadableRole(data.roles);
-                      });
-                    });
-                    // print('$isAdmin $isAgent $isDeliveryBoy');
-                    role = getReadableRole(data?.roles);
-                  } else if (state is CurrentCustomerError) {
-                    userName = '___';
-                    mobileNumber = '---';
-                    role = '---';
-                  }
-
-                  return Container(
-                    width: getWidth(context),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColor.primaryColor2,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: AppColor.primaryColor1.withOpacity(0.5),
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.grey[300],
-                          child: const Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                userName ?? '___',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                mobileNumber ?? '---',
-                                style: const TextStyle(color: Colors.black54),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                role ?? '---',
-                                style: const TextStyle(color: Colors.black87),
-                              ),
-                            ],
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => CompleteProfileScreen(
-                                  mobileNumber: mobileNumber,
-                                ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.edit, color: Colors.black87),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 20),
               // Options List
               Expanded(
                 child: ListView(
                   children: [
-                    if (isAdmin == true ||
-                        isSystemUser == true ||
-                        isAgent == true) ...[
-                      _buildListTile(
-                        Icons.supervised_user_circle_rounded,
-                        "Assign Role",
-                        () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (_) => AssignRole(
-                          //           isAdmin: isAdmin,
-                          //           isAgent: isAgent,
-                          //           isSystemUser: isSystemUser)),
-                          // );
-                        },
-                      ),
-                    ],
-                    // if (isAdmin == true || isSystemUser == true) ...[
-                    //   _buildListTile(Icons.auto_graph, "Total Sales", () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (_) => AdminandsystemUsersales(
-                    //                 isAdmin: isAdmin,
-                    //               )),
-                    //     );
-                    //   }),
-                    // ],
-                    // if (isDeliveryBoy == true || isAgent == true) ...[
-                    //   _buildListTile(Icons.auto_graph, "Sales & Earnings", () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (_) =>
-                    //               SalesAndEarnings(isAgent: isAgent ?? false)),
-                    //     );
-                    //   }),
-                    // ],
-                    // if (isAgent == true) ...[
-                    //   _buildListTile(
-                    //       Icons.assignment_turned_in_outlined, "Assign Orders",
-                    //       () {
-                    //     Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (_) =>
-                    //                 AssignOrdersScreen(userId: userId)));
-                    //   }),
-                    //   _buildListTile(Icons.storefront_outlined, "Pick At Store",
-                    //       () {
-                    //     Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (_) => PickAtStoreOrdersListScreen(
-                    //                 userId: userId)));
-                    //   }),
-                    //   _buildListTile(Icons.update_outlined, "Update Products",
-                    //       () {
-                    //     Navigator.push(context,
-                    //         MaterialPageRoute(builder: (_) => Productupdate()));
-                    //   }),
-                    // ],
-                    // if (isDeliveryBoy == true) ...[
-                    //   _buildListTile(Icons.delivery_dining, "Orders To Deliver",
-                    //       () {
-                    //     Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (_) => DeliveryBoyOrdersListScreen(
-                    //                 userId: userId)));
-                    //   }),
-                    // ],
-                    // _buildListTile(Icons.card_giftcard, "Scratch Cards", () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (_) => ScratchCardScreen()),
-                    //   );
-                    // }),
-                    // _buildListTile(
-                    //     Icons.location_on_outlined, "Saved Addresses", () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (_) => SavedAddress()),
-                    //   );
-                    // }),
+                    _buildListTile(
+                      Icons.manage_accounts_outlined,
+                      "Manage Services",
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Adminserviceslist(),
+                          ),
+                        );
+                      },
+                    ),
+                    _buildListTile(
+                      Icons.work_history_outlined,
+                      "Posted Works",
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WorkpostList(),
+                          ),
+                        );
+                      },
+                    ),
                     _buildListTile(
                       Icons.support_agent,
                       "Support",

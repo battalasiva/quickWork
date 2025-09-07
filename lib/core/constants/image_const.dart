@@ -1,7 +1,8 @@
 const String meatspotlogo = 'assets/images/splashScreen.png';
-const String backArrow = 'assets/images/backArrow.png';
 const String logo = 'assets/images/logo.png';
 const String bannerOne = 'assets/images/bannerOne.png';
+const String bannerTwo = 'assets/images/bannerTwo.png';
+const String electricalWork = 'assets/images/ElectricalWork.png';
 const String chiken = 'assets/images/Chiken.png';
 const String mutton = 'assets/images/mutton.png';
 const String fish = 'assets/images/fish.png';

@@ -6,7 +6,7 @@ import 'package:quickWork/core/constants/image_const.dart';
 import 'package:quickWork/core/constants/text_styles.dart';
 import 'package:quickWork/presentations/cubit/auth/trigger-otp/trigger_otp_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/trigger-otp/trigger_otp_state.dart';
-import 'package:quickWork/presentations/widgets/elements/CustomizedButton.dart';
+import 'package:quickWork/core/common/elements/CustomizedButton.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

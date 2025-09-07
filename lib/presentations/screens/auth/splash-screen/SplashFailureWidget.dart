@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quickWork/core/constants/colors.dart';
 import 'package:quickWork/core/constants/image_const.dart';
 import 'package:quickWork/core/constants/text_styles.dart';
-import 'package:quickWork/presentations/widgets/elements/ConfirmationDialog.dart';
+import 'package:quickWork/core/common/elements/ConfirmationDialog.dart';
 
 class SplashFailureWidget extends StatelessWidget {
   final VoidCallback onRefresh;

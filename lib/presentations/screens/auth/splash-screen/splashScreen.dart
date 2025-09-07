@@ -5,7 +5,7 @@ import 'package:quickWork/core/constants/text_keys.dart';
 import 'package:quickWork/core/utils/local-storage/Shared_prefs.dart';
 import 'package:quickWork/core/utils/push-notifications/PushNotificationServices.dart';
 import 'package:quickWork/presentations/screens/auth/login/login.dart';
-import 'package:quickWork/presentations/widgets/elements/BottomTabBase.dart';
+import 'package:quickWork/presentations/screens/auth/HomeScreen.dart';
 import 'package:in_app_update/in_app_update.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -39,18 +39,18 @@ class _SplashScreenState extends State<SplashScreen> {
     token = await SharedPrefsHelper.getString(AppKeys.authKey);
     // generateToken();
     print('Token: $token');
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => BottomTabNavigator()));
-    // if (token == null || token!.isEmpty) {
-    //   Navigator.of(
-    //     context,
-    //   ).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
-    // } else {
-    //   Navigator.of(context).pushReplacement(
-    //     MaterialPageRoute(builder: (_) => BottomTabNavigator()),
-    //   );
-    // }
+    // Navigator.of(
+    //   context,
+    // ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+    if (token == null || token!.isEmpty) {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
+    } else {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+    }
   }
 
   Future<void> generateToken() async {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quickWork/presentations/widgets/elements/custom_snackbar.dart';
+import 'package:quickWork/core/common/elements/custom_snackbar.dart';
 import 'network_service.dart';
 
 class NetworkHelper {
