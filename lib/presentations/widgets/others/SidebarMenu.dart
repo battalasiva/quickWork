@@ -9,6 +9,7 @@ import 'package:quickWork/presentations/screens/admin/AdminServicesList.dart';
 import 'package:quickWork/presentations/screens/admin/WorkPostList.dart';
 import 'package:quickWork/presentations/screens/auth/login/login.dart';
 import 'package:quickWork/presentations/screens/common/TermsandConditions.dart';
+import 'package:quickWork/presentations/screens/technicians/RaiseTechnicianRequest.dart';
 
 class SidebarMenu extends StatelessWidget {
   const SidebarMenu({super.key});
@@ -124,6 +125,18 @@ class SidebarMenu extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => WorkpostList()),
+                      );
+                    },
+                  ),
+                  _buildListTile(
+                    Icons.sensor_occupied_outlined,
+                    "Request To Technicion",
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Raisetechnicianrequest(),
+                        ),
                       );
                     },
                   ),

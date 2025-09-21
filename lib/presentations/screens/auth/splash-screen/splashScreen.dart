@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:quickWork/core/constants/image_const.dart';
 import 'package:quickWork/core/constants/text_keys.dart';
 import 'package:quickWork/core/utils/local-storage/Shared_prefs.dart';
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   permissions() async {
-    // await Geolocator.requestPermission();
+    await Geolocator.requestPermission();
     await notificationServices.requestNotificationPermissions();
   }
 

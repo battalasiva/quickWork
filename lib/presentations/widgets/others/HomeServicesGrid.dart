@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickWork/core/constants/app_sizes.dart';
 import 'package:quickWork/core/constants/colors.dart';
+import 'package:quickWork/core/common/commonMethods.dart';
+import 'package:quickWork/data/model/work-category/GetWorkCategoriesModel.dart';
+import 'package:quickWork/presentations/cubit/work-category/get-work-categories/get_work_categories_cubit.dart';
+import 'package:quickWork/presentations/cubit/work-category/get-work-categories/get_work_categories_state.dart';
 import 'package:quickWork/presentations/screens/users/workPostingScreen.dart';
 
-class HomeServicesGrid extends StatelessWidget {
+class HomeServicesGrid extends StatefulWidget {
   const HomeServicesGrid({super.key});
 
-  final List<_ServiceItem> services = const [
-    _ServiceItem('Plumbing', Icons.plumbing, Color(0xFFCCE5FF)),
-    _ServiceItem('Electrician', Icons.electrical_services, Color(0xFFFFE0B2)),
-    _ServiceItem('Cleaning', Icons.cleaning_services, Color(0xFFE1BEE7)),
-    _ServiceItem('Carpentry', Icons.handyman, Color(0xFFD1C4E9)),
-    _ServiceItem('Painting', Icons.format_paint, Color(0xFFFFF9C4)),
-    _ServiceItem('Pest Control', Icons.bug_report, Color(0xFFFFCDD2)),
-    _ServiceItem('AC Repair', Icons.ac_unit, Color(0xFFB2EBF2)),
-    _ServiceItem('Appliance Repair', Icons.build_circle, Color(0xFFFFF3E0)),
-    _ServiceItem('Laundry', Icons.local_laundry_service, Color(0xFFC8E6C9)),
-    _ServiceItem('Gardening', Icons.grass, Color(0xFFA5D6A7)),
-    _ServiceItem('Interior Design', Icons.chair, Color(0xFFF8BBD0)),
-    _ServiceItem('Movers & Packers', Icons.local_shipping, Color(0xFFB3E5FC)),
-  ];
+  @override
+  State<HomeServicesGrid> createState() => _HomeServicesGridState();
+}
+
+class _HomeServicesGridState extends State<HomeServicesGrid> {
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<GetWorkCategoriesCubit>().fetchWorkCategories(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,72 +42,117 @@ class HomeServicesGrid extends StatelessWidget {
             ),
           ),
         ),
-        ListView.builder(
-          itemCount: services.length,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: AppSizes.width(12)),
-          itemBuilder: (context, index) {
-            final service = services[index];
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: AppSizes.height(4)),
-              child: ListTile(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Workpostingscreen()),
+        BlocBuilder<GetWorkCategoriesCubit, GetWorkCategoriesState>(
+          builder: (context, state) {
+            if (state is GetWorkCategoriesLoading) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    "Loading Services...",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+              );
+            } else if (state is GetWorkCategoriesError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Error: ${state.message}",
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+              );
+            } else if (state is GetWorkCategoriesSuccess) {
+              final categories = state.categories;
+
+              if (categories.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    "No services available.",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                itemCount: categories.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.width(12)),
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+                  final categoryType = category.category ?? 'HANDYMAN';
+
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: AppSizes.height(4)),
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Workpostingscreen(cetrgoryId: category.id ?? 0),
+                          ),
+                        );
+                      },
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.width(16),
+                        vertical: AppSizes.height(8),
+                      ),
+                      leading: Container(
+                        width: AppSizes.width(50),
+                        height: AppSizes.height(50),
+                        decoration: BoxDecoration(
+                          color: ServiceConstants.getCategoryColor(categoryType),
+                          borderRadius: BorderRadius.circular(
+                            AppSizes.radius(12),
+                          ),
+                        ),
+                        child: Icon(
+                          ServiceConstants.getCategoryIcon(categoryType),
+                          size: AppSizes.iconSize(24),
+                          color: Colors.black87,
+                        ),
+                      ),
+                      title: Text(
+                        category.name ?? "NA",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: AppSizes.font(16),
+                          color: Colors.black87,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: AppSizes.iconSize(16),
+                        color: AppColor.primaryColor1,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppSizes.radius(12),
+                        ),
+                        side: BorderSide(
+                          color: Colors.grey.withOpacity(0.2),
+                          width: AppSizes.width(1),
+                        ),
+                      ),
+                    ),
                   );
                 },
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: AppSizes.width(16),
-                  vertical: AppSizes.height(8),
-                ),
-                leading: Container(
-                  width: AppSizes.width(50),
-                  height: AppSizes.height(50),
-                  decoration: BoxDecoration(
-                    color: service.bgColor,
-                    borderRadius: BorderRadius.circular(AppSizes.radius(12)),
-                  ),
-                  child: Icon(
-                    service.icon,
-                    size: AppSizes.iconSize(24),
-                    color: Colors.black87,
-                  ),
-                ),
-                title: Text(
-                  service.title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: AppSizes.font(16),
-                    color: Colors.black87,
-                  ),
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: AppSizes.iconSize(16),
-                  color: AppColor.primaryColor1,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSizes.radius(12)),
-                  side: BorderSide(
-                    color: Colors.grey.withOpacity(0.2),
-                    width: AppSizes.width(1),
-                  ),
-                ),
-              ),
-            );
+              );
+            }
+
+            return const SizedBox();
           },
         ),
       ],
     );
   }
-}
-
-class _ServiceItem {
-  final String title;
-  final IconData icon;
-  final Color bgColor;
-
-  const _ServiceItem(this.title, this.icon, this.bgColor);
 }

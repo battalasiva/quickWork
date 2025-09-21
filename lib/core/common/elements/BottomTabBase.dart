@@ -10,7 +10,7 @@ class BottomTabNavigator extends StatefulWidget {
 
 class _BottomTabNavigatorState extends State<BottomTabNavigator> {
   int _selectedIndex = 0;
-  final List<Widget> _screens = [HomeScreen(), ProfileScreen()];
+  final List<Widget> _screens = [HomeScreen()];
 
   void _onItemTapped(int index) {
     setState(() {

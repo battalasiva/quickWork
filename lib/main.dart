@@ -8,6 +8,13 @@ import 'package:quickWork/firebase_options.dart';
 import 'package:quickWork/presentations/cubit/auth/current-customer/current_customer_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/signin/sigin_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/trigger-otp/trigger_otp_cubit.dart';
+import 'package:quickWork/presentations/cubit/technicians/approve-technician/approve_technician_cubit.dart';
+import 'package:quickWork/presentations/cubit/technicians/delete-Technician/delete_technician_cubit.dart';
+import 'package:quickWork/presentations/cubit/technicians/raise-technician-request/RaiseTechnicianRequestCubit.dart';
+import 'package:quickWork/presentations/cubit/work-category/delete-work-category/delete_work_category_cubit.dart';
+import 'package:quickWork/presentations/cubit/work-category/get-work-categories/get_work_categories_cubit.dart';
+import 'package:quickWork/presentations/cubit/work-category/post-work/post_work_type_cubit.dart';
+import 'package:quickWork/presentations/cubit/work-request/post-work-request/work_request_cubit.dart';
 import 'package:quickWork/presentations/screens/auth/splash-screen/splashScreen.dart';
 import 'core/constants/app_sizes.dart';
 import 'core/network/injection.dart' as di;
@@ -39,6 +46,13 @@ void main() async {
         BlocProvider(create: (_) => di.sl<TriggerOtpCubit>()),
         BlocProvider(create: (_) => di.sl<SignInCubit>()),
         BlocProvider(create: (_) => di.sl<CurrentCustomerCubit>()),
+        BlocProvider(create: (_) => di.sl<PostWorkTypeCubit>()),
+        BlocProvider(create: (_) => di.sl<GetWorkCategoriesCubit>()),
+        BlocProvider(create: (_) => di.sl<DeleteWorkCategoryCubit>()),
+        BlocProvider(create: (_) => di.sl<WorkRequestCubit>()),
+        BlocProvider(create: (_) => di.sl<RaiseTechnicianRequestCubit>()),
+        BlocProvider(create: (_) => di.sl<DeleteTechnicianCubit>()),
+        BlocProvider(create: (_) => di.sl<ApproveTechnicianCubit>()),
       ],
       child: QuickWorkApp(),
     ),
