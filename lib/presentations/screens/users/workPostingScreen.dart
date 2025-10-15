@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:quickWork/core/common/elements/CustomizedButton.dart';
 import 'package:quickWork/core/common/elements/commonFields.dart';
 import 'package:quickWork/core/common/elements/top_bar.dart';
+import 'package:quickWork/core/constants/app_sizes.dart';
 import 'package:quickWork/core/constants/colors.dart';
 import 'package:quickWork/core/constants/text_styles.dart';
+import 'package:quickWork/presentations/cubit/work-request/post-work-request/work_request_cubit.dart';
+import 'package:quickWork/presentations/cubit/work-request/post-work-request/work_request_state.dart';
 
 class Workpostingscreen extends StatefulWidget {
-  const Workpostingscreen({super.key});
+  final int cetrgoryId;
+  const Workpostingscreen({super.key, required this.cetrgoryId});
 
   @override
   State<Workpostingscreen> createState() => _WorkpostingscreenState();
@@ -16,148 +22,189 @@ class Workpostingscreen extends StatefulWidget {
 class _WorkpostingscreenState extends State<Workpostingscreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controllers
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _postalCodeController = TextEditingController();
 
-  // Dropdown selections
-  String? _selectedWorkId;
-  String? _selectedPriority;
+  @override
+  void initState() {
+    super.initState();
+    _fetchLocation();
+  }
+
+  Future<void> _fetchLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return;
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return;
+    }
+    if (permission == LocationPermission.deniedForever) return;
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    await _getAddressFromCoordinates(position.latitude, position.longitude);
+  }
+
+  Future<void> _getAddressFromCoordinates(
+    double latitude,
+    double longitude,
+  ) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      latitude,
+      longitude,
+    );
+    Placemark place = placemarks[0];
+    setState(() {
+      _postalCodeController.text = place.postalCode ?? '';
+      _cityController.text = place.locality ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopBar(title: 'Post Work'),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              // Title
-              CommonComponents.defaultTextField(
-                context,
-                controller: _titleController,
-                title: "Title",
-                hintText: "Enter Work Title",
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Title is required';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
+      body: BlocConsumer<WorkRequestCubit, WorkRequestState>(
+        listener: (context, state) {
+          if (state is WorkRequestSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Work Request Posted Successfully")),
+            );
+            Navigator.pop(context); // go back after success
+          } else if (state is WorkRequestError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
+        builder: (context, state) {
+          return Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  // Date picker
+                  CommonComponents.defaultTextField(
+                    context,
+                    controller: _dateController,
+                    title: "Scheduled Date",
+                    hintText: "Select Date",
+                    readOnly: true,
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        _dateController.text =
+                            "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                      }
+                    },
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? 'Scheduled Date is required'
+                        : null,
+                  ),
+                  AppSizes.vSpace(16),
 
-              // Description
-              CommonComponents.defaultTextField(
-                context,
-                controller: _descriptionController,
-                title: "Description",
-                hintText: "Enter Work Description",
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Description is required';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
+                  // Title
+                  CommonComponents.defaultTextField(
+                    context,
+                    controller: _titleController,
+                    title: "Title",
+                    hintText: "Enter Work Title",
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? 'Title is required'
+                        : null,
+                  ),
+                  AppSizes.vSpace(16),
 
-              // Work ID dropdown
-              // CommonComponents.defaultDropdownSearch<String>(
-              //   context,
-              //   title: "Work Type",
-              //   hintText: "Select Work Type",
-              //   items: (filter, _) async {
-              //     await Future.delayed(const Duration(milliseconds: 300));
-              //     return ["Carpentry", "Electrician", "Plumber"];
-              //   },
-              //   itemAsString: (String u) => u,
-              //   selectedItem: _selectedWorkId,
-              //   onChanged: (String? value) {
-              //     setState(() {
-              //       _selectedWorkId = value;
-              //     });
-              //   },
-              //   validator: (value) =>
-              //       value == null ? 'Work ID is required' : null,
-              // ),
-              // const SizedBox(height: 16),
+                  // Description
+                  CommonComponents.defaultTextField(
+                    context,
+                    controller: _descriptionController,
+                    title: "Description",
+                    hintText: "Enter Work Description",
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? 'Description is required'
+                        : null,
+                  ),
+                  AppSizes.vSpace(16),
 
-              // Priority dropdown
-              CommonComponents.defaultDropdownSearch<String>(
-                context,
-                title: "Priority",
-                hintText: "Select Priority",
-                items: (filter, _) async {
-                  await Future.delayed(const Duration(milliseconds: 300));
-                  return ["Low", "Medium", "High"];
-                },
-                itemAsString: (String u) => u,
-                selectedItem: _selectedPriority,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedPriority = value;
-                  });
-                },
-                validator: (value) =>
-                    value == null ? 'Priority is required' : null,
-              ),
-              const SizedBox(height: 16),
+                  // City
+                  CommonComponents.defaultTextField(
+                    context,
+                    controller: _cityController,
+                    title: "City",
+                    hintText: "Enter City",
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? 'City is required'
+                        : null,
+                  ),
+                  AppSizes.vSpace(16),
 
-              // Date picker
-              CommonComponents.defaultTextField(
-                context,
-                controller: _dateController,
-                title: "Date",
-                hintText: "Select Date",
-                readOnly: true,
-                onTap: () async {
-                  DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    _dateController.text =
-                        "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
-                  }
-                },
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Date is required';
-                  }
-                  return null;
-                },
+                  // Postal Code
+                  CommonComponents.defaultTextField(
+                    context,
+                    controller: _postalCodeController,
+                    maxLength: 6,
+                    keyboardType: TextInputType.number,
+                    title: "Postal Code",
+                    hintText: "Enter Postal Code",
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? 'Postal Code is required'
+                        : null,
+                  ),
+                  AppSizes.vSpace(80),
+                ],
               ),
-              const SizedBox(height: 80), // Space for bottom sheet
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
 
-      // Bottom sheet with submit button
-      bottomSheet: Container(
-        padding: const EdgeInsets.all(16),
-        color: Colors.white,
-        child: CustomizedButton(
-          label: 'Post Work',
-          isLoading: false, // set loading state here if needed
-          style: txt_15_500.copyWith(color: AppColor.white),
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              // Submit form
-              print("Title: ${_titleController.text}");
-              print("Description: ${_descriptionController.text}");
-              print("Work ID: $_selectedWorkId");
-              print("Priority: $_selectedPriority");
-              print("Date: ${_dateController.text}");
-            }
-          },
-        ),
+      // Submit Button
+      bottomSheet: BlocBuilder<WorkRequestCubit, WorkRequestState>(
+        builder: (context, state) {
+          return Container(
+            padding: const EdgeInsets.all(16),
+            color: Colors.white,
+            child: CustomizedButton(
+              label: 'Post Work',
+              isLoading: state is WorkRequestLoading,
+              style: txt_15_500.copyWith(color: AppColor.white),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  final requestBody = {
+                    "title": _titleController.text,
+                    "description": _descriptionController.text,
+                    "workTypeId": widget.cetrgoryId,
+                    "priority": "HIGH",
+                    "status": "PENDING_ADMIN_REVIEW",
+                    "scheduledDate": _dateController.text,
+                    "address": {
+                      "city": _cityController.text,
+                      "postalCode": _postalCodeController.text,
+                    },
+                  };
+
+                  context.read<WorkRequestCubit>().createWorkRequest(
+                    context,
+                    requestBody,
+                  );
+                }
+              },
+            ),
+          );
+        },
       ),
     );
   }

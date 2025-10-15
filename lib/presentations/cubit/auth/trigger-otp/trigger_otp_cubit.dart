@@ -49,8 +49,8 @@ class TriggerOtpCubit extends Cubit<TriggerOtpState> {
       final otpEntity = await useCase(mobileNumber);
       emit(TriggerOtpLoaded(otpEntity));
 
-      final otpValue = otpEntity.data?.otp?.isNotEmpty == true
-          ? otpEntity.data?.otp!
+      final otpValue = otpEntity.otp?.isNotEmpty == true
+          ? otpEntity.otp!
           : 'true';
       print('OTPPPPP $otpValue');
       Navigator.push(

@@ -42,7 +42,7 @@ android {
 
     defaultConfig {
         applicationId = "com.quickWork"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 35
         versionCode = flutterVersionCode
         versionName = flutterVersionName
