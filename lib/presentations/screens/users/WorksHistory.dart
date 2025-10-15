@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickWork/core/common/commonMethods.dart';
+import 'package:quickWork/core/common/elements/AppLoaderWidget.dart';
 import 'package:quickWork/core/common/elements/top_bar.dart';
+import 'package:quickWork/presentations/cubit/work-request/work-requests-list/get_work_requests_list_cubit.dart';
+import 'package:quickWork/presentations/cubit/work-request/work-requests-list/get_work_requests_list_state.dart';
 
 class WorksHistory extends StatefulWidget {
   const WorksHistory({super.key});
@@ -10,37 +14,11 @@ class WorksHistory extends StatefulWidget {
 }
 
 class _WorksHistoryState extends State<WorksHistory> {
-  // Dummy work history data
-  final List<Map<String, String>> workHistory = [
-    {
-      "title": "AC Service",
-      "description": "General service and filter cleaning",
-      "workType": "Maintenance",
-      "date": "2025-07-28",
-      "status": "Completed",
-    },
-    {
-      "title": "Plumbing Work",
-      "description": "Fix bathroom tap leakage",
-      "workType": "Repair",
-      "date": "2025-07-22",
-      "status": "In Progress",
-    },
-    {
-      "title": "Painting Job",
-      "description": "Paint the kitchen walls",
-      "workType": "Renovation",
-      "date": "2025-07-15",
-      "status": "Cancelled",
-    },
-    {
-      "title": "Electrical Work",
-      "description": "Install new LED lights in hall",
-      "workType": "Installation",
-      "date": "2025-07-05",
-      "status": "Completed",
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    context.read<GetWorkRequestsListCubit>().fetchWorkRequests(context);
+  }
 
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
@@ -50,6 +28,9 @@ class _WorksHistoryState extends State<WorksHistory> {
         return Colors.blue;
       case "cancelled":
         return Colors.red;
+      case "pending":
+      case "pending_admin_review":
+        return Colors.orange;
       default:
         return Colors.grey;
     }
@@ -59,75 +40,121 @@ class _WorksHistoryState extends State<WorksHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopBar(title: 'Work History'),
+      body: BlocBuilder<GetWorkRequestsListCubit, GetWorkRequestsListState>(
+        builder: (context, state) {
+          if (state is GetWorkRequestsListLoading) {
+            return const Center(child: AppLoader());
+          } else if (state is GetWorkRequestsListError) {
+            return Center(child: Text("Error: ${state.message}"));
+          } else if (state is GetWorkRequestsListLoaded) {
+            final workRequests = state.workRequests;
 
-      body: ListView.builder(
-        padding: const EdgeInsets.all(12),
-        itemCount: workHistory.length,
-        itemBuilder: (context, index) {
-          final work = workHistory[index];
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 4,
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        work["title"] ?? "",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+            if (workRequests.isEmpty) {
+              return const Center(child: Text("No work requests found"));
+            }
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: workRequests.length,
+              itemBuilder: (context, index) {
+                final work = workRequests[index];
+
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title Row (status)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Request #${work.id}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: _getStatusColor(
+                                  work.status ?? "",
+                                ).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                work.status ?? "",
+                                style: TextStyle(
+                                  color: _getStatusColor(work.status ?? ""),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _getStatusColor(
-                            work["status"] ?? "",
-                          ).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          work["status"] ?? "",
-                          style: TextStyle(
-                            color: _getStatusColor(work["status"] ?? ""),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+
+                        const SizedBox(height: 6),
+
+                        // Created At
+                        if (work.createdAt != null)
+                          Text(
+                            'Created On : ${formatDate(work.createdAt.toString())}',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
                           ),
+
+                        const SizedBox(height: 8),
+
+                        // Description
+                        Text(
+                          work.description ?? "",
+                          style: const TextStyle(fontSize: 14),
                         ),
-                      ),
-                    ],
+
+                        const SizedBox(height: 8),
+
+                        // WorkTypes chips
+                        if (work.workTypes != null &&
+                            work.workTypes!.isNotEmpty)
+                          Wrap(
+                            spacing: 8,
+                            children: work.workTypes!
+                                .map(
+                                  (type) => Chip(
+                                    label: Text(type),
+                                    backgroundColor: Colors.blue.withOpacity(
+                                      0.1,
+                                    ),
+                                    labelStyle: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    work["description"] ?? "",
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    "Work Type: ${work["workType"]}",
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    "Date: ${DateFormat('dd MMM yyyy').format(DateTime.parse(work["date"]!))}",
-                    style: const TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-          );
+                );
+              },
+            );
+          }
+
+          return const SizedBox.shrink();
         },
       ),
     );

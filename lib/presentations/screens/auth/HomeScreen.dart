@@ -73,7 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 (address) => address.isDefaultAddress == true,
               );
               globalData.addressId = defaultAddress.id;
-              globalData.villageId = defaultAddress.villageId;
               globalData.postalCode = defaultAddress.postalCode;
             }
             isAgent = data!.roles!.any((role) => role.name == 'ROLE_AGENT');

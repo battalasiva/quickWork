@@ -33,13 +33,15 @@ class CurrentCustomerModal {
 
 class Data {
   int? id;
+  String? fullName;
   List<Role>? roles;
   String? primaryContact;
-  List<dynamic>? addresses;
+  List<Address>? addresses;
   bool? register;
 
   Data({
     this.id,
+    this.fullName,
     this.roles,
     this.primaryContact,
     this.addresses,
@@ -48,26 +50,53 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
+    fullName: json["fullName"],
     roles: json["roles"] == null
         ? []
         : List<Role>.from(json["roles"]!.map((x) => Role.fromJson(x))),
     primaryContact: json["primaryContact"],
     addresses: json["addresses"] == null
         ? []
-        : List<dynamic>.from(json["addresses"]!.map((x) => x)),
+        : List<Address>.from(
+            json["addresses"]!.map((x) => Address.fromJson(x)),
+          ),
     register: json["register"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "fullName": fullName,
     "roles": roles == null
         ? []
         : List<dynamic>.from(roles!.map((x) => x.toJson())),
     "primaryContact": primaryContact,
     "addresses": addresses == null
         ? []
-        : List<dynamic>.from(addresses!.map((x) => x)),
+        : List<dynamic>.from(addresses!.map((x) => x.toJson())),
     "register": register,
+  };
+}
+
+class Address {
+  int? id;
+  String? city;
+  String? postalCode;
+  bool? isDefaultAddress;
+
+  Address({this.id, this.city, this.postalCode, this.isDefaultAddress});
+
+  factory Address.fromJson(Map<String, dynamic> json) => Address(
+    id: json["id"],
+    city: json["city"],
+    postalCode: json["postalCode"],
+    isDefaultAddress: json["isDefaultAddress"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "city": city,
+    "postalCode": postalCode,
+    "isDefaultAddress": isDefaultAddress,
   };
 }
 

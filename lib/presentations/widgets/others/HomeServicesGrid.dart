@@ -16,7 +16,6 @@ class HomeServicesGrid extends StatefulWidget {
 }
 
 class _HomeServicesGridState extends State<HomeServicesGrid> {
-
   @override
   void initState() {
     super.initState();
@@ -72,8 +71,7 @@ class _HomeServicesGridState extends State<HomeServicesGrid> {
               final categories = state.categories;
 
               if (categories.isEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
+                return Center(
                   child: Text(
                     "No services available.",
                     style: TextStyle(fontSize: 16),
@@ -110,7 +108,9 @@ class _HomeServicesGridState extends State<HomeServicesGrid> {
                         width: AppSizes.width(50),
                         height: AppSizes.height(50),
                         decoration: BoxDecoration(
-                          color: ServiceConstants.getCategoryColor(categoryType),
+                          color: ServiceConstants.getCategoryColor(
+                            categoryType,
+                          ),
                           borderRadius: BorderRadius.circular(
                             AppSizes.radius(12),
                           ),

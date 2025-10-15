@@ -66,9 +66,9 @@ class _AdminserviceslistState extends State<Adminserviceslist> {
                 );
               } else if (state is DeleteWorkCategoryError) {
                 Navigator.of(context).pop(); // close dialog
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.message)));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error while Deleting....')),
+                );
               }
             },
             builder: (context, state) {

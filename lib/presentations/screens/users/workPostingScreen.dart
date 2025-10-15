@@ -155,6 +155,8 @@ class _WorkpostingscreenState extends State<Workpostingscreen> {
                   CommonComponents.defaultTextField(
                     context,
                     controller: _postalCodeController,
+                    maxLength: 6,
+                    keyboardType: TextInputType.number,
                     title: "Postal Code",
                     hintText: "Enter Postal Code",
                     validator: (value) => value == null || value.trim().isEmpty
@@ -185,8 +187,8 @@ class _WorkpostingscreenState extends State<Workpostingscreen> {
                     "title": _titleController.text,
                     "description": _descriptionController.text,
                     "workTypeId": widget.cetrgoryId,
-                    "priority": "HIGH", // constant
-                    "status": "PENDING", // constant
+                    "priority": "HIGH",
+                    "status": "PENDING_ADMIN_REVIEW",
                     "scheduledDate": _dateController.text,
                     "address": {
                       "city": _cityController.text,
