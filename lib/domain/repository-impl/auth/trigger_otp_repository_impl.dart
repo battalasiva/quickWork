@@ -10,6 +10,6 @@ class TriggerOtpRepositoryImpl implements TriggerOtpRepository {
   @override
   Future<TriggerOtpModel> getOtp(String mobileNumber) async {
     final model = await remoteDataSource.fetchOtp(mobileNumber);
-    return TriggerOtpModel(data: model.data);
+    return TriggerOtpModel(otp: model.otp);
   }
 }

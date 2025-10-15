@@ -1,3 +1,15 @@
+// To parse this JSON data, do
+//
+//     final currentCustomerModal = currentCustomerModalFromJson(jsonString);
+
+import 'dart:convert';
+
+CurrentCustomerModal currentCustomerModalFromJson(String str) =>
+    CurrentCustomerModal.fromJson(json.decode(str));
+
+String currentCustomerModalToJson(CurrentCustomerModal data) =>
+    json.encode(data.toJson());
+
 class CurrentCustomerModal {
   String? message;
   String? status;
@@ -5,35 +17,26 @@ class CurrentCustomerModal {
 
   CurrentCustomerModal({this.message, this.status, this.data});
 
-  // Updated fromJson: Handle nullable fields explicitly
-  CurrentCustomerModal.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    status = json['status'];
-    // Check if 'data' exists before trying to parse it
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
-  }
+  factory CurrentCustomerModal.fromJson(Map<String, dynamic> json) =>
+      CurrentCustomerModal(
+        message: json["message"],
+        status: json["status"],
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =
-        <String, dynamic>{}; // Use Map<String, dynamic> for clarity
-    data['message'] = message;
-    data['status'] = status;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "message": message,
+    "status": status,
+    "data": data?.toJson(),
+  };
 }
 
 class Data {
   int? id;
   String? fullName;
-  List<Roles>? roles; // Made nullable
+  List<Role>? roles;
   String? primaryContact;
-  String? creationTime;
-  List<String>? referralCodes; // Made nullable
-  List<Addresses>? addresses; // Made nullable
-  Wallet? wallet;
+  List<Address>? addresses;
   bool? register;
 
   Data({
@@ -41,186 +44,70 @@ class Data {
     this.fullName,
     this.roles,
     this.primaryContact,
-    this.creationTime,
-    this.referralCodes,
     this.addresses,
-    this.wallet,
     this.register,
   });
 
-  // Updated fromJson: Handle all fields as potentially null
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    fullName = json['fullName'];
-    // Handle roles list: if null, initialize as empty list
-    if (json['roles'] != null) {
-      roles = []; // Initialize as empty list
-      json['roles'].forEach((v) {
-        roles!.add(Roles.fromJson(v));
-      });
-    } else {
-      roles = null; // Ensure it's null if not present
-    }
-    primaryContact = json['primaryContact'];
-    creationTime = json['creationTime'];
-    // Handle referralCodes list: if null, initialize as empty list
-    referralCodes = json['referralCodes']
-        ?.cast<String>(); // Use null-aware access for lists
-    // Handle addresses list: if null, initialize as empty list
-    if (json['addresses'] != null) {
-      addresses = []; // Initialize as empty list
-      json['addresses'].forEach((v) {
-        addresses!.add(Addresses.fromJson(v));
-      });
-    } else {
-      addresses = null; // Ensure it's null if not present
-    }
-    // Handle wallet object: check if null before parsing
-    wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
-    register = json['register']; // `bool?` already handles null implicitly
-  }
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    id: json["id"],
+    fullName: json["fullName"],
+    roles: json["roles"] == null
+        ? []
+        : List<Role>.from(json["roles"]!.map((x) => Role.fromJson(x))),
+    primaryContact: json["primaryContact"],
+    addresses: json["addresses"] == null
+        ? []
+        : List<Address>.from(
+            json["addresses"]!.map((x) => Address.fromJson(x)),
+          ),
+    register: json["register"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['fullName'] = fullName;
-    if (roles != null) {
-      data['roles'] = roles!.map((v) => v.toJson()).toList();
-    }
-    data['primaryContact'] = primaryContact;
-    data['creationTime'] = creationTime;
-    data['referralCodes'] = referralCodes;
-    if (addresses != null) {
-      data['addresses'] = addresses!.map((v) => v.toJson()).toList();
-    }
-    if (wallet != null) {
-      data['wallet'] = wallet!.toJson();
-    }
-    data['register'] = register;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "fullName": fullName,
+    "roles": roles == null
+        ? []
+        : List<dynamic>.from(roles!.map((x) => x.toJson())),
+    "primaryContact": primaryContact,
+    "addresses": addresses == null
+        ? []
+        : List<dynamic>.from(addresses!.map((x) => x.toJson())),
+    "register": register,
+  };
 }
 
-class Roles {
+class Address {
+  int? id;
+  String? city;
+  String? postalCode;
+  bool? isDefaultAddress;
+
+  Address({this.id, this.city, this.postalCode, this.isDefaultAddress});
+
+  factory Address.fromJson(Map<String, dynamic> json) => Address(
+    id: json["id"],
+    city: json["city"],
+    postalCode: json["postalCode"],
+    isDefaultAddress: json["isDefaultAddress"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "city": city,
+    "postalCode": postalCode,
+    "isDefaultAddress": isDefaultAddress,
+  };
+}
+
+class Role {
   String? name;
   int? id;
 
-  Roles({this.name, this.id});
+  Role({this.name, this.id});
 
-  // All fields already nullable, parsing handles null implicitly
-  Roles.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    id = json['id'];
-  }
+  factory Role.fromJson(Map<String, dynamic> json) =>
+      Role(name: json["name"], id: json["id"]);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['id'] = id;
-    return data;
-  }
-}
-
-class Addresses {
-  int? id;
-  String? doorNumber;
-  String? addressLine1;
-  String? addressLine2;
-  String? city;
-  String? postalCode;
-  String? state;
-  String? otherDetails;
-  String? villageId;
-  String? villageName;
-  bool? isDefaultAddress; // Already nullable
-
-  Addresses({
-    this.id,
-    this.doorNumber,
-    this.addressLine1,
-    this.addressLine2,
-    this.city,
-    this.postalCode,
-    this.state,
-    this.otherDetails,
-    this.villageId,
-    this.villageName,
-    this.isDefaultAddress,
-  });
-
-  // Updated fromJson: Use null-aware operators or provide default for non-nullable types if desired
-  Addresses.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    doorNumber = json['doorNumber'];
-    addressLine1 = json['addressLine1'];
-    addressLine2 = json['addressLine2'];
-    city = json['city'];
-    postalCode = json['postalCode'];
-    state = json['state'];
-    otherDetails = json['otherDetails'];
-    villageId = json['villageId'];
-    villageName = json['villageName'];
-    // If you want isDefaultAddress to default to false if not present, keep `?? false`.
-    // If you want it to be truly nullable, remove `?? false`.
-    isDefaultAddress = json['isDefaultAddress'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['doorNumber'] = doorNumber;
-    data['addressLine1'] = addressLine1;
-    data['addressLine2'] = addressLine2;
-    data['city'] = city;
-    data['postalCode'] = postalCode;
-    data['state'] = state;
-    data['otherDetails'] = otherDetails;
-    data['villageId'] = villageId;
-    data['villageName'] = villageName;
-    data['isDefaultAddress'] =
-        isDefaultAddress; // If it's nullable, no ?? false needed here
-    return data;
-  }
-}
-
-class Wallet {
-  int? id;
-  double? availableBalance;
-  double? scratchCardAmount;
-  double? totalAmount;
-  int? referedCount;
-  String? mobilNumber;
-
-  Wallet({
-    this.id,
-    this.availableBalance,
-    this.scratchCardAmount,
-    this.totalAmount,
-    this.referedCount,
-    this.mobilNumber,
-  });
-
-  // Updated fromJson: Use null-aware operators for numbers to handle potential nulls
-  Wallet.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    // For doubles and ints, direct assignment handles null, but you can explicitly cast if needed
-    // or provide default values if you want non-nullable fields.
-    availableBalance = json['availableBalance']
-        ?.toDouble(); // Explicit toDouble() is good practice
-    scratchCardAmount = json['scratchCardAmount']?.toDouble();
-    totalAmount = json['totalAmount']?.toDouble();
-    referedCount = json['referedCount'];
-    mobilNumber = json['mobilNumber'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['availableBalance'] = availableBalance;
-    data['scratchCardAmount'] = scratchCardAmount;
-    data['totalAmount'] = totalAmount;
-    data['referedCount'] = referedCount;
-    data['mobilNumber'] = mobilNumber;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {"name": name, "id": id};
 }

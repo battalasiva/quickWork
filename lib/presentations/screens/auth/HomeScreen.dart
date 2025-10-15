@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickWork/core/common/globalData.dart';
 import 'package:quickWork/core/constants/colors.dart';
-import 'package:quickWork/core/constants/text_styles.dart';
 import 'package:quickWork/core/utils/local-storage/Shared_prefs.dart';
 import 'package:quickWork/presentations/cubit/auth/current-customer/current_customer_cubit.dart';
 import 'package:quickWork/presentations/cubit/auth/current-customer/current_customer_state.dart';
+import 'package:quickWork/presentations/cubit/work-category/get-work-categories/get_work_categories_cubit.dart';
 import 'package:quickWork/presentations/screens/auth/login/login.dart';
 import 'package:quickWork/presentations/screens/auth/splash-screen/SplashFailureWidget.dart';
 import 'package:quickWork/core/common/elements/AppLoaderWidget.dart';
 import 'package:quickWork/core/common/elements/ImageSlider.dart';
-import 'package:quickWork/presentations/screens/users/workPostingScreen.dart';
 import 'package:quickWork/presentations/widgets/others/HomeServicesGrid.dart';
 import 'package:quickWork/presentations/widgets/others/TopBarSection.dart';
 import 'package:quickWork/presentations/widgets/others/SidebarMenu.dart';
@@ -56,27 +55,24 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         } else if (state is CurrentCustomerSuccess) {
+          context.read<GetWorkCategoriesCubit>().fetchWorkCategories(context);
           final data = state.customer.data;
           setState(() {
-            userName = data?.fullName ?? '___';
+            // userName = data?.fullName ?? '___';
             mobileNumber = data?.primaryContact ?? '---';
             role = (data?.roles != null && data!.roles!.isNotEmpty)
                 ? data.roles![0].name ?? '---'
                 : '---';
             register = data?.register ?? false;
-            availableBalance =
-                data?.wallet?.availableBalance?.toString() ?? '0';
-            totalAmount = data?.wallet?.totalAmount?.toString() ?? '0';
+
             globalData.userId = data?.id ?? 0;
-            globalData.walletAmount =
-                data?.wallet?.availableBalance?.toDouble() ?? 0.0;
+
             globalData.primaryContact = data?.primaryContact;
             if (data?.addresses?.isNotEmpty == true) {
               final defaultAddress = data!.addresses!.firstWhere(
                 (address) => address.isDefaultAddress == true,
               );
               globalData.addressId = defaultAddress.id;
-              globalData.villageId = defaultAddress.villageId;
               globalData.postalCode = defaultAddress.postalCode;
             }
             isAgent = data!.roles!.any((role) => role.name == 'ROLE_AGENT');
@@ -102,25 +98,25 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       builder: (context, state) {
-        // if (state is CurrentCustomerLoading) {
-        //   return Scaffold(
-        //     backgroundColor: AppColor.white,
-        //     body: const Center(child: AppLoader()),
-        //   );
-        // }
-        // if (state is CurrentCustomerError) {
-        //   return SplashFailureWidget(
-        //     onRefresh: fetchCurrentCustomer,
-        //     onLogout: () async {
-        //       SharedPrefsHelper.clearAllData();
-        //       Navigator.pushAndRemoveUntil(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => LoginScreen()),
-        //         (route) => false,
-        //       );
-        //     },
-        //   );
-        // }
+        if (state is CurrentCustomerLoading) {
+          return Scaffold(
+            backgroundColor: AppColor.white,
+            body: const Center(child: AppLoader()),
+          );
+        }
+        if (state is CurrentCustomerError) {
+          return SplashFailureWidget(
+            onRefresh: fetchCurrentCustomer,
+            onLogout: () async {
+              SharedPrefsHelper.clearAllData();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (route) => false,
+              );
+            },
+          );
+        }
         return Scaffold(
           backgroundColor: AppColor.white,
           endDrawer: SidebarMenu(),
@@ -156,48 +152,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
-          // floatingActionButton: Container(
-          //   width: 170,
-          //   height: 48,
-          //   decoration: BoxDecoration(
-          //     color: AppColor.primaryColor1,
-          //     borderRadius: BorderRadius.circular(30),
-          //     boxShadow: [
-          //       BoxShadow(
-          //         color: Colors.black26,
-          //         blurRadius: 6,
-          //         offset: Offset(0, 3),
-          //       ),
-          //     ],
-          //   ),
-          //   child: InkWell(
-          //     borderRadius: BorderRadius.circular(30),
-          //     onTap: () {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(builder: (context) => Workpostingscreen()),
-          //       );
-          //     },
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         Icon(
-          //           Icons.work_outline, // icon for "work"
-          //           color: AppColor.white,
-          //           size: 22,
-          //         ),
-          //         const SizedBox(width: 8),
-          //         Text(
-          //           "Post Work",
-          //           style: txt_15_500.copyWith(color: AppColor.white),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          // floatingActionButtonLocation:
-          //     FloatingActionButtonLocation.centerFloat,
         );
       },
     );

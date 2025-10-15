@@ -84,13 +84,11 @@ class CommonComponents {
           keyboardType: keyboardType,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           inputFormatters: inputFormatters,
-          cursorColor: filled!
-              ? AppColor.primaryColor1
-              : AppColor.primaryColor3,
+          cursorColor: filled! ? AppColor.black1 : AppColor.primaryColor3,
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: filled ? AppColor.primaryColor1 : AppColor.primaryColor3,
+            color: filled ? AppColor.black1 : AppColor.primaryColor3,
           ),
           decoration: InputDecoration(
             counterText: '',
@@ -209,7 +207,7 @@ class CommonComponents {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           inputFormatters: inputFormatters,
           autofocus: false,
-          cursorColor: AppColor.primaryColor1,
+          cursorColor: AppColor.black1,
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
             counterText: '',
@@ -217,11 +215,11 @@ class CommonComponents {
             hintStyle: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: AppColor.primaryColor1,
+              color: AppColor.black1,
             ),
             suffixIcon: Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child: Icon(Icons.search, color: AppColor.primaryColor1),
+              child: Icon(Icons.search, color: AppColor.black1),
             ),
             filled: true,
             fillColor: AppColor.greyBackground,

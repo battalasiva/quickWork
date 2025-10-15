@@ -31,74 +31,6 @@ final List<String> monthNames = months
     .map((month) => month['name'] as String)
     .toList();
 
-// class YearDropdown extends StatelessWidget {
-//   final List<String> years;
-//   final String? selectedYear;
-//   final Function(String?) onChanged;
-
-//   const YearDropdown({
-//     super.key,
-//     required this.years,
-//     required this.selectedYear,
-//     required this.onChanged,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BuildDropDownField(
-//       label: 'Year',
-//       items: years,
-//       onChanged: onChanged,
-//       value: selectedYear,
-//     );
-//   }
-// }
-
-// class MonthDropdown extends StatelessWidget {
-//   final List<Map<String, dynamic>> months;
-//   final String? selectedMonth;
-//   final ValueChanged<int?> onChanged;
-
-//   const MonthDropdown({
-//     super.key,
-//     required this.months,
-//     required this.selectedMonth,
-//     required this.onChanged,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final monthNames = months.map((month) => month['name'] as String).toList();
-
-//     return BuildDropDownField(
-//       label: 'Month',
-//       items: monthNames,
-//       onChanged: (value) {
-//         final selectedMonthData =
-//             months.firstWhere((month) => month['name'] == value);
-//         onChanged(selectedMonthData['index']);
-//       },
-//       value: selectedMonth,
-//     );
-//   }
-// }
-String getTeluguCategoryName(String category) {
-  switch (category) {
-    case 'Small Boiler':
-      return 'చిన్న బ్రాయిలర్';
-    case 'Big Boiler':
-      return 'పెద్ద బ్రాయిలర్';
-    case 'Natu Boiler':
-      return 'నాటు బ్రాయిలర్';
-    case 'Country Chicken':
-      return 'దేశీ కోడి';
-    case 'Skinless':
-      return 'తీవ్రమైన కోడి (చర్మం లేని)';
-    default:
-      return category;
-  }
-}
-
 String formatDate(
   String date, {
   bool dateTime = false,
@@ -178,5 +110,166 @@ String getGreetingMessage() {
     return 'Good Afternoon';
   } else {
     return 'Good Evening';
+  }
+}
+
+class ServiceCategory {
+  final String name;
+  final IconData icon;
+  final Color color;
+
+  const ServiceCategory(this.name, this.icon, this.color);
+}
+
+class ServiceConstants {
+  static const List<String> categories = [
+    'ELECTRICIAN',
+    'PLUMBER',
+    'CLEANER',
+    'REPAIRS',
+    'PAINTER',
+    'CARPENTER',
+    'APPLIANCE',
+    'PEST_CONTROL',
+    'GARDENER',
+    'INTERIOR_DESIGNER',
+    'MASON',
+    'ROOFER',
+    'HVAC',
+    'FLOORING',
+    'GLASS_WORKER',
+    'MOVER',
+    'VEHICLE_SERVICE',
+    'IT_SUPPORT',
+    'BEAUTY_SERVICE',
+    'LAUNDRY',
+    'SECURITY',
+    'CCTV_INSTALLER',
+    'WATER_SERVICE',
+    'SOLAR_INSTALLER',
+    'FURNITURE_ASSEMBLER',
+    'LOCKSMITH',
+    'HANDYMAN',
+    'HOME_AUTOMATION',
+  ];
+
+  static final Map<String, ServiceCategory> categoryMap = {
+    'ELECTRICIAN': ServiceCategory(
+      'Electrician',
+      Icons.electrical_services,
+      Color(0xFFFFE0B2),
+    ),
+    'PLUMBER': ServiceCategory('Plumber', Icons.plumbing, Color(0xFFCCE5FF)),
+    'CLEANER': ServiceCategory(
+      'Cleaner',
+      Icons.cleaning_services,
+      Color(0xFFE1BEE7),
+    ),
+    'REPAIRS': ServiceCategory('Repairs', Icons.handyman, Color(0xFFD1C4E9)),
+    'PAINTER': ServiceCategory(
+      'Painter',
+      Icons.format_paint,
+      Color(0xFFFFF9C4),
+    ),
+    'CARPENTER': ServiceCategory(
+      'Carpenter',
+      Icons.carpenter,
+      Color(0xFFFFCDD2),
+    ),
+    'APPLIANCE': ServiceCategory(
+      'Appliance Repair',
+      Icons.build_circle,
+      Color(0xFFFFF3E0),
+    ),
+    'PEST_CONTROL': ServiceCategory(
+      'Pest Control',
+      Icons.bug_report,
+      Color(0xFFFFCDD2),
+    ),
+    'GARDENER': ServiceCategory('Gardener', Icons.grass, Color(0xFFA5D6A7)),
+    'INTERIOR_DESIGNER': ServiceCategory(
+      'Interior Designer',
+      Icons.chair,
+      Color(0xFFF8BBD0),
+    ),
+    'MASON': ServiceCategory('Mason', Icons.construction, Color(0xFFD7CCC8)),
+    'ROOFER': ServiceCategory('Roofer', Icons.roofing, Color(0xFFB0BEC5)),
+    'HVAC': ServiceCategory('AC Repair', Icons.ac_unit, Color(0xFFB2EBF2)),
+    'FLOORING': ServiceCategory('Flooring', Icons.layers, Color(0xFFDCEDC8)),
+    'GLASS_WORKER': ServiceCategory(
+      'Glass Work',
+      Icons.window,
+      Color(0xFFE0F2F1),
+    ),
+    'MOVER': ServiceCategory(
+      'Movers & Packers',
+      Icons.local_shipping,
+      Color(0xFFB3E5FC),
+    ),
+    'VEHICLE_SERVICE': ServiceCategory(
+      'Vehicle Service',
+      Icons.car_repair,
+      Color(0xFFFFE0B2),
+    ),
+    'IT_SUPPORT': ServiceCategory(
+      'IT Support',
+      Icons.computer,
+      Color(0xFFE1BEE7),
+    ),
+    'BEAUTY_SERVICE': ServiceCategory(
+      'Beauty Service',
+      Icons.face,
+      Color(0xFFF8BBD0),
+    ),
+    'LAUNDRY': ServiceCategory(
+      'Laundry',
+      Icons.local_laundry_service,
+      Color(0xFFC8E6C9),
+    ),
+    'SECURITY': ServiceCategory('Security', Icons.security, Color(0xFFFFCDD2)),
+    'CCTV_INSTALLER': ServiceCategory(
+      'CCTV Installation',
+      Icons.videocam,
+      Color(0xFFD1C4E9),
+    ),
+    'WATER_SERVICE': ServiceCategory(
+      'Water Service',
+      Icons.water_drop,
+      Color(0xFFB2EBF2),
+    ),
+    'SOLAR_INSTALLER': ServiceCategory(
+      'Solar Installation',
+      Icons.solar_power,
+      Color(0xFFFFF9C4),
+    ),
+    'FURNITURE_ASSEMBLER': ServiceCategory(
+      'Furniture Assembly',
+      Icons.chair_alt,
+      Color(0xFFDCEDC8),
+    ),
+    'LOCKSMITH': ServiceCategory('Locksmith', Icons.lock, Color(0xFFB0BEC5)),
+    'HANDYMAN': ServiceCategory('Handyman', Icons.handyman, Color(0xFFD1C4E9)),
+    'HOME_AUTOMATION': ServiceCategory(
+      'Home Automation',
+      Icons.home_outlined,
+      Color(0xFFE0F2F1),
+    ),
+  };
+
+  static ServiceCategory getCategoryDetails(String category) {
+    return categoryMap[category] ??
+        ServiceCategory('Other', Icons.work, Color(0xFFE0E0E0));
+  }
+
+  static IconData getCategoryIcon(String category) {
+    return getCategoryDetails(category).icon;
+  }
+
+  static Color getCategoryColor(String category) {
+    return getCategoryDetails(category).color;
+  }
+
+  static String getCategoryName(String category) {
+    return getCategoryDetails(category).name;
   }
 }

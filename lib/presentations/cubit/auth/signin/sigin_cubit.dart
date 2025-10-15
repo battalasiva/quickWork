@@ -53,7 +53,8 @@ class SignInCubit extends Cubit<SignInState> {
           'REFRESH_TOKEN',
           signEntity.data?.refreshToken ?? '',
         );
-        if (signEntity.data?.register == true) {
+        if (signEntity.data?.register == true ||
+            signEntity.data?.register == false) {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => HomeScreen()),
             (route) => false,
